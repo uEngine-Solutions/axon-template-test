@@ -14,6 +14,9 @@ import ClaimDetail from "./components/listers/ClaimDetail"
 import DeliveryManager from "./components/listers/DeliveryCards"
 import DeliveryDetail from "./components/listers/DeliveryDetail"
 
+import InventoryManager from "./components/listers/InventoryCards"
+import InventoryDetail from "./components/listers/InventoryDetail"
+
 
 export default new Router({
     // mode: 'history',
@@ -50,6 +53,17 @@ export default new Router({
                 path: '/deliveries/:id',
                 name: 'DeliveryDetail',
                 component: DeliveryDetail
+            },
+
+            {
+                path: '/inventories',
+                name: 'InventoryManager',
+                component: InventoryManager
+            },
+            {
+                path: '/inventories/:id',
+                name: 'InventoryDetail',
+                component: InventoryDetail
             },
 
 

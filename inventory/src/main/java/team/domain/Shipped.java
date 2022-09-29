@@ -2,9 +2,8 @@ package team.domain;
 
 import team.domain.*;
 import team.infra.AbstractEvent;
-import java.util.*;
 import lombok.*;
-
+import java.util.*;
 @Data
 @ToString
 public class Shipped extends AbstractEvent {
@@ -13,11 +12,6 @@ public class Shipped extends AbstractEvent {
     private String orderId;
     private String address;
     private String options;
-
-    public Shipped(Delivery aggregate){
-        super(aggregate);
-    }
-    public Shipped(){
-        super();
-    }
 }
+
+

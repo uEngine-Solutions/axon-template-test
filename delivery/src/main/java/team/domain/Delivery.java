@@ -35,6 +35,12 @@ public class Delivery  {
     
     
     private String address;
+    
+    
+    
+    
+    
+    private String options;
 
     @PostPersist
     public void onPostPersist(){

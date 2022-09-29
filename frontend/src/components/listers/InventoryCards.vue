@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1 style = "margin-left:4.5%; margin-top:-10px;">Delivery</h1>
+        <h1 style = "margin-left:4.5%; margin-top:-10px;">Inventory</h1>
         <v-col style="margin-bottom:40px;">
             <div class="text-center">
                 <v-dialog
@@ -10,7 +10,7 @@
                         hide-overlay
                         transition="dialog-bottom-transition"
                 >
-                    <Delivery :offline="offline" class="video-card" :isNew="true" :editMode="true" v-model="newValue" 
+                    <Inventory :offline="offline" class="video-card" :isNew="true" :editMode="true" v-model="newValue" 
                             @add="append" v-if="tick"/>
 
                     <v-btn
@@ -33,7 +33,7 @@
             </div>
         </v-col>
         <v-row>
-            <Delivery :offline="offline" class="video-card" v-for="(value, index) in values" v-model="values[index]" v-bind:key="index" @delete="remove"/>
+            <Inventory :offline="offline" class="video-card" v-for="(value, index) in values" v-model="values[index]" v-bind:key="index" @delete="remove"/>
         </v-row>
     </div>
 </template>
@@ -41,12 +41,12 @@
 <script>
 
     const axios = require('axios').default;
-    import Delivery from './../Delivery.vue';
+    import Inventory from './../Inventory.vue';
 
     export default {
-        name: 'DeliveryManager',
+        name: 'InventoryManager',
         components: {
-            Delivery,
+            Inventory,
         },
         props: {
             offline: Boolean
@@ -64,13 +64,11 @@
                 return;
             } 
 
-            var temp = await axios.get(axios.fixUrl('/deliveries'))
-            me.values = temp.data._embedded.deliveries;
+            var temp = await axios.get(axios.fixUrl('/inventories'))
+            me.values = temp.data._embedded.inventories;
             
             me.newValue = {
-                'orderId': '',
-                'address': '',
-                'options': '',
+                'stock': 0,
             }
         },
         methods:{
