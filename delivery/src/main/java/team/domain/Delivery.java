@@ -83,15 +83,18 @@ public class Delivery  {
 
         
     }
+
     public static void ship(OrderPlaced orderPlaced){
 
-        /** Example 1:  new item 
+        /** Example 1:  new item         */
         Delivery delivery = new Delivery();
+        delivery.setOrderId(orderPlaced.getId());
+        deiivery.setAddress(orderPlaced.getAddress());
         repository().save(delivery);
 
         Shipped shipped = new Shipped(delivery);
         shipped.publishAfterCommit();
-        */
+
 
         /** Example 2:  finding and process
         
