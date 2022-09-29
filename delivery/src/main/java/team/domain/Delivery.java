@@ -18,9 +18,9 @@ public class Delivery  {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
     
-    private String orderId;
+    private Long orderId;
     
-    private Long address;
+    private String address;
     
     private String options;
 
@@ -77,7 +77,7 @@ public class Delivery  {
         /** Example 1:  new item         */
         Delivery delivery = new Delivery();
         delivery.setOrderId(orderPlaced.getId());
-        deiivery.setAddress(orderPlaced.getAddress());
+        delivery.setAddress(orderPlaced.getAddress());
         repository().save(delivery);
 
         Shipped shipped = new Shipped(delivery);
