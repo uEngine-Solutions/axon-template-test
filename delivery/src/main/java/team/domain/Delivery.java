@@ -11,34 +11,16 @@ import java.util.Date;
 @Entity
 @Table(name="Delivery_table")
 @Data
-
 public class Delivery  {
 
     
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    
-    
-    
-    
-    
     private Long id;
-    
-    
-    
-    
     
     private String orderId;
     
-    
-    
-    
-    
     private Long address;
-    
-    
-    
-    
     
     private String options;
 
