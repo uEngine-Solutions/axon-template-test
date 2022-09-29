@@ -28,13 +28,13 @@ public class Delivery  {
     
     
     
-    private String orderId;
+    private Long orderId;
     
     
     
     
     
-    private Long address;
+    private String address;
     
     
     
