@@ -102,7 +102,7 @@
             
             this.newValue = {
                 'orderId': '',
-                'address': '',
+                'address': 0,
                 'options': '',
             }
         },

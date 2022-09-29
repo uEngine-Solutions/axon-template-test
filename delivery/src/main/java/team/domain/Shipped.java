@@ -11,7 +11,7 @@ public class Shipped extends AbstractEvent {
 
     private Long id;
     private String orderId;
-    private String address;
+    private Long address;
     private String options;
 
     public Shipped(Delivery aggregate){

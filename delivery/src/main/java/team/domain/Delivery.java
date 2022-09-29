@@ -34,7 +34,7 @@ public class Delivery  {
     
     
     
-    private String address;
+    private Long address;
     
     
     
