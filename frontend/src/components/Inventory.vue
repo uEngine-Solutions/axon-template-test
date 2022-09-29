@@ -10,16 +10,14 @@
         </template>
 
         <v-card-title v-if="value._links">
-            Delivery # {{value._links.self.href.split("/")[value._links.self.href.split("/").length - 1]}}
+            Inventory # {{value._links.self.href.split("/")[value._links.self.href.split("/").length - 1]}}
         </v-card-title >
         <v-card-title v-else>
-            Delivery
+            Inventory
         </v-card-title >
 
         <v-card-text>
-            <String label="OrderId" v-model="value.orderId" :editMode="editMode"/>
-            <Number label="Address" v-model="value.address" :editMode="editMode"/>
-            <String label="Options" v-model="value.options" :editMode="editMode"/>
+            <Number label="Stock" v-model="value.stock" :editMode="editMode"/>
         </v-card-text>
 
         <v-card-actions>
@@ -81,7 +79,7 @@
 
 
     export default {
-        name: 'Delivery',
+        name: 'Inventory',
         components:{
         },
         props: {
@@ -133,7 +131,7 @@
 
                     if(!this.offline) {
                         if(this.isNew) {
-                            temp = await axios.post(axios.fixUrl('/deliveries'), this.value)
+                            temp = await axios.post(axios.fixUrl('/inventories'), this.value)
                         } else {
                             temp = await axios.put(axios.fixUrl(this.value._links.self.href), this.value)
                         }

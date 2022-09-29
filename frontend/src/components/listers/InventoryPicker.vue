@@ -15,13 +15,7 @@
                             <v-list-item-title>
                             </v-list-item-title>
                             <v-list-item-subtitle>
-                                OrderId :  {{item.orderId }}
-                            </v-list-item-subtitle>
-                            <v-list-item-subtitle>
-                                Address :  {{item.address }}
-                            </v-list-item-subtitle>
-                            <v-list-item-subtitle>
-                                Options :  {{item.options }}
+                                Stock :  {{item.stock }}
                             </v-list-item-subtitle>
                         </v-list-item-content>
 
@@ -40,7 +34,7 @@
     const axios = require('axios').default;
 
     export default {
-        name: 'DeliveryPicker',
+        name: 'InventoryPicker',
         props: {
             value: [String, Object, Array, Number, Boolean],
         },
@@ -50,14 +44,14 @@
         }),
         async created() {
             var me = this;
-            var temp = await axios.get(axios.fixUrl('/deliveries'))
+            var temp = await axios.get(axios.fixUrl('/inventories'))
             if(temp.data) {
-                me.list = temp.data._embedded.deliveries;
+                me.list = temp.data._embedded.inventories;
             }
 
             if(me.value && typeof me.value == "object" && Object.values(me.value)[0]) {
                 var id = Object.values(me.value)[0];
-                var tmpValue = await axios.get(axios.fixUrl('/deliveries/' + id))
+                var tmpValue = await axios.get(axios.fixUrl('/inventories/' + id))
                 if(tmpValue.data) {
                     var val = tmpValue.data
                     me.list.forEach(function(item, idx) {
@@ -74,10 +68,6 @@
                 if(val != undefined) {
                     var arr = this.list[val]._links.self.href.split('/');
                     obj['id'] = arr[4]; 
-                    
-                    
-                    
-                    
                     
                     
                     
