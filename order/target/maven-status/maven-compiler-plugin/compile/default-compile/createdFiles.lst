@@ -1,0 +1,10 @@
+team/OrderApplication.class
+team/command/OrderCommand.class
+team/query/OrdersEventHandler.class
+team/query/FindAllOrdersQuery.class
+team/command/OrderCancelCommand.class
+team/api/OrderController.class
+team/event/OrderCanceledEvent.class
+team/query/PolicyHandler.class
+team/aggregate/OrderAggregate.class
+team/event/OrderPlacedEvent.class

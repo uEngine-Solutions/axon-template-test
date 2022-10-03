@@ -3,7 +3,7 @@ package team.aggregate;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
-import org.axonframework.modelling.command.AggregateLifecycle;
+import static org.axonframework.modelling.command.AggregateLifecycle.*;
 import org.axonframework.spring.stereotype.Aggregate;
 
 import org.springframework.beans.BeanUtils;
@@ -13,7 +13,7 @@ import java.util.List;
 import team.command.*;
 import team.event.*;
 
-@Aggregate
+@Aggregate(snapshotTriggerDefinition = "orderAggregateSnapshotTriggerDefinition")
 public class OrderAggregate {
 
     @AggregateIdentifier
@@ -22,20 +22,40 @@ public class OrderAggregate {
     private Long qty;
     private String address;
 
-    private OrderAggregate(){}
+    private String status;
+
+    
+    protected OrderAggregate(){}
+
+    public OrderAggregate(Long id){
+        this.id = id;
+    }
 
     @CommandHandler
-    public void handle(OrderCommand command){
-        // TODO send Event
-        // AggregateLifecycle.apply( Event );
+    public OrderAggregate(OrderCommand command){
+        this.id = command.getId();
 
-        }
+        OrderPlacedEvent event = new OrderPlacedEvent();
+        BeanUtils.copyProperties(command, event);     
+        
+        apply(event);
+    }
+
+    // @CommandHandler
+    // public void handle(OrderCommand command){
+    //     // TODO send Event
+    //     // AggregateLifecycle.apply( Event );
+
+    //     }
+
     @CommandHandler
     public void handle(OrderCancelCommand command){
-        // TODO send Event
-        // AggregateLifecycle.apply( Event );
 
-        }
+        OrderCanceledEvent orderCanceledEvent = new OrderCanceledEvent();
+        BeanUtils.copyProperties(command, orderCanceledEvent);
+        apply(orderCanceledEvent);
+
+    }
 
 
     @EventSourcingHandler
@@ -46,7 +66,8 @@ public class OrderAggregate {
 
     @EventSourcingHandler
     public void on(OrderCanceledEvent event) {
-        BeanUtils.copyProperties(event, this);
+        this.status = "DELETED";
+        markDeleted();
     }
 
 
