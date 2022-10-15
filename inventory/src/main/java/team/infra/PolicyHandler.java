@@ -1,43 +1,62 @@
 package team.infra;
 
-import javax.naming.NameParser;
 
-import javax.naming.NameParser;
-import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import team.config.kafka.KafkaProcessor;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.axonframework.config.ProcessingGroup;
+import org.axonframework.eventhandling.EventHandler;
+import org.axonframework.queryhandling.QueryHandler;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.stream.annotation.StreamListener;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 import team.domain.*;
 
 
 @Service
-@Transactional
+@ProcessingGroup("orders")
 public class PolicyHandler{
-    @Autowired InventoryRepository inventoryRepository;
-    
-    @StreamListener(KafkaProcessor.INPUT)
-    public void whatever(@Payload String eventString){}
 
-    @StreamListener(value=KafkaProcessor.INPUT, condition="headers['type']=='Shipped'")
-    public void wheneverShipped_UpdateStock(@Payload Shipped shipped){
+    @Autowired
+    CommandGateway commandGateway;
 
-        Shipped event = shipped;
-        System.out.println("\n\n##### listener UpdateStock : " + shipped + "\n\n");
+    @EventHandler
+    public void on(OrderPlaced orderPlaced){
 
+System.out.println("---- orderPlaced: " + orderPlaced);
 
+        DecreaseInventoryCommand decreaseInventoryCommand = new DecreaseInventoryCommand();
+
+        decreaseInventoryCommand.setId(orderPlaced.getProductId());
+        decreaseInventoryCommand.setQty(orderPlaced.getQty().intValue());
         
+        BeanUtils.copyProperties(orderPlaced, decreaseInventoryCommand);
+        commandGateway.send(decreaseInventoryCommand);
+    }
 
-        // Sample Logic //
-        Inventory.updateStock(event);
-        
+    private final Map<String, Inventory> inventories = new HashMap<>(); //must be changed to some kind of storage-based
 
-        
+    @EventHandler
+    public void on(InventoryCreated event) {
+        String orderId = event.getId();
+        Inventory inventory = new Inventory();
+        inventory.on(event);
 
+        inventories.put(orderId, inventory);
+    }
+
+    @EventHandler
+    public void on(InventoryDecreased event) {
+        Inventory inventory = inventories.get(event.getId());
+        inventory.on(event);
+    }
+
+    @QueryHandler
+    public List<Inventory> handle(FindAllInventoryQuery query) {
+        return new ArrayList<>(inventories.values());
     }
 
 }
